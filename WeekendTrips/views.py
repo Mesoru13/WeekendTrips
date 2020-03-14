@@ -4,11 +4,10 @@ from django.urls import reverse
 from .forms import InputDataForm
 from .models import Result
 import json
+from time import sleep
 
 
 def find_trips(data):
-    # Ваня может вернуть
-    # Откуда, куда, цены, даты (про рейс пока ничего не известно)
     a = [
             {'type': 'flight', 'origin': 'Москва', 'destination': 'Сочи', 'number': 1130, 'airline': 'SU', 'price': 16487, 'departure_at': '2020-03-21T22:55:00Z', 'return_at': '2020-03-22T10:45:00Z'},
             {'type': 'train', 'seat': 'Нижние', 'price': '13735', 'number': '104В', 'time': '1д. 1ч.', 'origin': 'Москва', 'destination': 'Сочи'}
@@ -46,6 +45,7 @@ def home(request):
         model = Result.objects.get(session_id=current_session_id)
         form = InputDataForm(request.POST)
         json_result = find_trips(form)
+        sleep(60)
         model.json_result = json.dumps(json_result)
         model.save()
         return HttpResponseRedirect(reverse('results'))

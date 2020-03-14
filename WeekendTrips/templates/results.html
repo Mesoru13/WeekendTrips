@@ -12,8 +12,17 @@
   </head>
   <body>
     <h1>Weekend Trips</h1>
-
-    <h2>{{ json_result.city }}</h2>
+    <table align="center" style="background-color: lavender" border="1">
+        <tbody>
+            {% for advice in json_result %}
+            <tr>
+                {% for key,value in advice.items %}
+                <td>{{ key }}:{{ value }}</td>
+                {% endfor %}
+            </tr><tr style="height:20px"></tr>
+            {%  endfor %}
+        </tbody>
+    </table>
     <form action="../home" method="get">
         <button class="btn btn-primary" type="submit">Try new search!</button>
     </form>
