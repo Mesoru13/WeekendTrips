@@ -45,7 +45,7 @@ def home(request):
         model = Result.objects.get(session_id=current_session_id)
         form = InputDataForm(request.POST)
         json_result = find_trips(form)
-        sleep(60)
+        sleep(120)
         model.json_result = json.dumps(json_result)
         model.save()
         return HttpResponseRedirect(reverse('results'))

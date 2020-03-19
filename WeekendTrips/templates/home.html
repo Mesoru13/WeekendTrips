@@ -6,8 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <!-- Bootstrap CSS -->
+        {% load static %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="loading_ring_stylesheet.css">
+        <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
         <title>WEEKEND TRIPS HOME</title>
     </head>
     <body>
@@ -34,7 +35,7 @@
                             {% endfor %}
                         </td></tr>
                         <tr></tr>
-                        <tr><td align="center"><button type="submit" class="btn btn-primary" onclick="show_loading_rind()">Find my trip!</button></td></tr>
+                        <tr><td align="center"><button type="submit" class="btn btn-primary" onclick="show_loading_ring()">Find my trip!</button></td></tr>
                     </tbody>
                 </table>
             </form>
@@ -44,14 +45,13 @@
                     <tr><td><label>We have your previous search results. Wanna see them?</label></td></tr>
                     <tr><td align="center">
                         <form action="results/" method="get">
-                            <button class="btn btn-primary" type="submit" onsubmit="show_loading_ring()">Show my previous search</button>
+                            <button class="btn btn-primary" type="submit">Show my previous search</button>
                         </form>
                     </td></tr>
                 </tbody></table>
             {% endif %}
         </div>
-        <div id="loading_ring" class="lds-ring" hidden="true>
-        </div>
+        <div id="loading_ring" class="loader" hidden="true">Loading...</div>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
