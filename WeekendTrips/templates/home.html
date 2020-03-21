@@ -5,28 +5,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bootstrap CSS -->
+        <!-- Bootstrap, JS and CSS -->
         {% load static %}
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% load bootstrap4 %}       {# import bootstrap4 #}
+        {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+        {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+        {{ form.media }}            {# Adds date-picker required JS and CSS #}
         <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
         <title>WEEKEND TRIPS HOME</title>
     </head>
     <body>
         <div id="main_form">
             <h1 align="center">Weekend Trips</h1>
-            <form action="" method="post">
+            <form action="" method="post" onsubmit="show_loading_ring()" onchange="hide_error_label()">
                 {% csrf_token %}
-                <table align="center" style="background-color: lavender">
+                <table align="center" style="background-color: lavender" width="400px">
                     <tbody>
+                        <tr><td>The closest weekend dates:</td></tr>
+                        <tr><td>{{ form.start_date }}</td></tr>
+                        <tr><td>{{ form.end_date }}</td></tr>
                         <tr><td>State persons count:</td></tr>
                         <tr><td>{{ form.persons_count }}</td></tr>
                         <tr><td>Your allowance:</td></tr>
                         <tr><td>{{ form.max_price }}</td></tr>
-                        <tr><td>Choose your Saturday:</td></tr>
-                        <tr><td>{{ form.trip_date }}</td></tr>
-                        <tr><td>Select your departure city:</td></tr>
+                        <tr><td>Type departure city:</td></tr>
                         <tr><td>{{ form.departure_city }}</td></tr>
-                        <tr><td>Choose your on-road preferences:</td></tr>
+                        <tr><td>You expect to spent on a road:</td></tr>
                         <tr><td>
                             {% for check in form.time_for_travel %}
                                 <div class="checkbox">
@@ -35,13 +39,17 @@
                             {% endfor %}
                         </td></tr>
                         <tr></tr>
-                        <tr><td align="center"><button type="submit" class="btn btn-primary" onclick="show_loading_ring()">Find my trip!</button></td></tr>
+                        <tr><td align="center"><button type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
                     </tbody>
                 </table>
             </form>
-            <p></p>
+            {% if form_error_message == '' %}
+                <p align="center"></p>
+            {% else %}
+                <p align="center"><label id="error_label">{{ form_error_message }}</label></p>
+            {% endif %}
             {% if are_previous_results_available %}
-                <table align="center" style="background-color: lavender"> <tbody>
+                <table align="center" style="background-color: lavender" width="400px"> <tbody>
                     <tr><td><label>We have your previous search results. Wanna see them?</label></td></tr>
                     <tr><td align="center">
                         <form action="results/" method="get">
@@ -52,15 +60,13 @@
             {% endif %}
         </div>
         <div id="loading_ring" class="loader" hidden="true">Loading...</div>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script>
             function show_loading_ring() {
                 document.getElementById('main_form').hidden = true;
                 document.getElementById('loading_ring').hidden = false;
+            }
+            function hide_error_label() {
+                document.getElementById('error_label').hidden = true;
             }
         </script>
     </body>

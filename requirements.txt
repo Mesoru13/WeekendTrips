@@ -1,1 +1,3 @@
 Django
+django-bootstrap-datepicker-plus
+django-bootstrap4
