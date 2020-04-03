@@ -1,69 +1,113 @@
-from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import InputDataForm
-from .models import Result
+from .models import TaskRequest
 import json
-from time import sleep
+import uuid
 
 
-def find_trips(data):
-    a = [
-            {'type': 'flight', 'origin': 'Москва', 'destination': 'Сочи', 'number': 1130, 'airline': 'SU', 'price': 16487, 'departure_at': '2020-03-21T22:55:00Z', 'return_at': '2020-03-22T10:45:00Z'},
-            {'type': 'train', 'seat': 'Нижние', 'price': '13735', 'number': '104В', 'time': '1д. 1ч.', 'origin': 'Москва', 'destination': 'Сочи'}
-        ]
-    return a
+def sort_requests_by_datetime(requests):
+    return requests
 
 
 def home(request):
     are_previous_results_available = False
-    is_session_id_available = False
-    current_session_id = ''
-    if request.COOKIES.get('session_id') is not None:
-        cookies_session_id = request.COOKIES.get('session_id')
-        model = Result.objects.get(session_id=cookies_session_id)
-        if model is not None:
-            is_session_id_available = True
-            current_session_id = cookies_session_id
-            if model.json_result != '':
-                are_previous_results_available = True
-
-    if not is_session_id_available:
-        current_session_id = str(Result.objects.count() + 1)
-        model = Result(session_id=current_session_id, json_result="")
-        model.save()
-
     if request.method == 'GET':
         form = InputDataForm()
+        task_id = request.GET.get('task_id')
+        if task_id is not None:
+            form = InputDataForm()
+            task_request = TaskRequest.objects.get(task_id=task_id)
+            if task_request.request_status == 1003:
+                are_previous_results_available = True
+
         response = render(request, 'home.html',
-                          {'form': form, 'are_previous_results_available': are_previous_results_available,
+                          {'form': form,
+                           'are_previous_results_available': are_previous_results_available,
                            'form_error_message': ''})
-        if not is_session_id_available:
-            response.set_cookie('session_id', current_session_id)
         return response
     elif request.method == 'POST':
-        current_session_id = request.COOKIES.get('session_id')
-        model = Result.objects.get(session_id=current_session_id)
-        form = InputDataForm(request.POST)
+        input_data = InputDataForm(request.POST)
+        task_id = uuid.uuid4().hex
+        json_task_params = {}
+        task_request = TaskRequest(task_id=task_id,
+                                   json_task_params=json.dumps(json_task_params, ensure_ascii=False))
 
-        if form.is_valid():
-            json_result = find_trips(form)
-            model.json_result = json.dumps(json_result)
-            model.save()
-            return HttpResponseRedirect(reverse('results'))
-
-        form.clean()
-        return render(request, 'home.html',
-                      {'form': form, 'are_previous_results_available': are_previous_results_available,
-                       'form_error_message': 'The form your submitted is invalid, please retry entering content.'})
+        response = None
+        if input_data.is_valid():
+            task_request.request_status = 1001
+            response = HttpResponseRedirect('/results/?task_id={}'.format(task_id))
+        else:
+            response = render(request, 'home.html',
+                              {'form': input_data,
+                               'are_previous_results_available': are_previous_results_available,
+                               'form_error_message':
+                                   'The form your submitted is invalid, please retry entering content.'})
+        task_request.save()
+        return response
 
 
 def results(request):
     if request.method == 'GET':
-        if request.COOKIES.get('session_id') is None:
+        if request.GET.get('task_id') is None:
             return HttpResponseRedirect(reverse('home'))
         else:
-            current_session_id = request.COOKIES.get('session_id')
-            model = Result.objects.get(session_id=current_session_id)
-            json_result = json.loads(model.json_result)
-            return render(request, 'results.html', {'json_result': json_result})
+            task_id = request.GET.get('task_id')
+            task_request = TaskRequest.objects.get(task_id=task_id)
+            json_task_result = json.loads(task_request.json_task_result)
+            if task_request.request_status == 1001 \
+                    or task_request.request_status == 1002 \
+                    or task_request.request_status == 1004:
+                return render(request, 'results.html', {'task_id': task_id,
+                                                        'status': task_request.request_status})
+            elif task_request.request_status == 1003:
+                json_result = json.loads(task_request.json_task_result)
+            return render(request, 'results.html', {'task_id': task_id,
+                                                    'status': task_request.request_status,
+                                                    'json_result': json_task_result})
+
+
+@csrf_exempt
+def get_task(request):
+    if request.method == 'GET':
+        task_requests = TaskRequest.objects.filter(request_status=1001)
+        task_requests = sort_requests_by_datetime(task_requests)
+
+        response = HttpResponse()
+        response.status_code = 200
+        if len(task_requests) > 0:
+            response['task_id'] = task_requests[0].task_id
+            response['task_params'] = task_requests[0].json_task_params
+            task_request = TaskRequest.objects.get(task_id=task_requests[0].task_id)
+            task_request.request_status = 1002
+            task_request.save()
+
+        return response
+    else:
+        return HttpResponseBadRequest('get_task works only in GET')
+
+
+@csrf_exempt
+def commit_task(request):
+    if request.method == 'POST':
+        if request.POST.get('task_id') is None \
+                or request.POST.get('status') is None:
+            return HttpResponseBadRequest('task_id or status or both were not provided')
+        task_id = request.POST.get('task_id')
+        status = request.POST.get('status')
+
+        task_request = TaskRequest.objects.get(task_id=task_id)
+        if status == 'OK':
+            task_request.request_status = 1003
+            if request.POST.get('task_result') is None:
+                return HttpResponseBadRequest('task_result was not provided with successful search')
+            else:
+                task_request.json_task_result = request.POST.get('task_result')
+        else:
+            task_request.request_status = 1004
+        task_request.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponseBadRequest('commit_task works only in POST')

@@ -1,34 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      <!-- Bootstrap, JS and CSS -->
-      {% load static %}
-      {% load bootstrap4 %}       {# import bootstrap4 #}
-      {% bootstrap_css %}         {# Embed Bootstrap CSS #}
-      {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
-      {{ form.media }}            {# Adds date-picker required JS and CSS #}
-      <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
-    <title>WEEKEND TRIPS RESULTS</title>
-  </head>
-  <body>
-    <h1>Weekend Trips</h1>
-    <table align="center" style="background-color: lavender" border="1">
-        <tbody>
-            {% for advice in json_result %}
-            <tr>
-                {% for key,value in advice.items %}
-                <td>{{ key }}:{{ value }}</td>
-                {% endfor %}
-            </tr><tr style="height:20px"></tr>
-            {%  endfor %}
-        </tbody>
-    </table>
-    <form action="../home" method="get">
-        <button class="btn btn-primary" type="submit">Try new search!</button>
-    </form>
+        <!-- Bootstrap, JS and CSS -->
+        {% load static %}
+        {% load bootstrap4 %}       {# import bootstrap4 #}
+        {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+        {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+        {{ form.media }}            {# Adds date-picker required JS and CSS #}
+        <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
+        <title>WEEKEND TRIPS RESULTS</title>
+    </head>
+    <body {% if status == 1001 or status == 1002 %} onload="AutoRefresh(30000)" {% endif %}>
+        <h1 align="center">Weekend Trips</h1>
+        {% if status == 1001 or status == 1002  %}
+            <p></p>
+            <p></p>
+            <p align="center">Searching!</p>
+            <div align="center" id="loading_ring" class="loader"/>
+        {% elif status == 1003 %}
+            <table align="center" style="background-color: lavender" border="1">
+                <tbody>
+                {% for advice in json_result %}
+                    <tr>
+                        {% for key,value in advice.items %}
+                            <td>{{ key }}:{{ value }}</td>
+                        {% endfor %}
+                    </tr><tr style="height:20px"></tr>
+                {%  endfor %}
+                </tbody>
+            </table>
+        {% elif status == 1004 %}
+            <form action="/home" method="get" >
+                <input type="hidden" name="task_id" value="{{ task_id }}">
+                <div align="center">
+                    <p>Your search have failed :( Please retry it!</p>
+                    <button  class="btn btn-primary" type="submit">Retry!</button>
+                </div>
+            </form>
+
+        {% endif %}
+
+        <script type = "text/JavaScript">
+            function AutoRefresh( t ) {
+                setTimeout("location.reload(true);", t);
+            }
+        </script>
   </body>
 </html>

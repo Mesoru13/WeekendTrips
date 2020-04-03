@@ -23,5 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('results/', views.results, name='results'),
+    url('get_task/', views.get_task, name='get_task'),
+    url('commit_task/', views.commit_task, name='commit_task'),
     url('', views.home, name='home')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

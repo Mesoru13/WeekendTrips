@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 import datetime
 from bootstrap_datepicker_plus import DatePickerInput
 

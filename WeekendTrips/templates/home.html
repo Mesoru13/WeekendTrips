@@ -17,7 +17,7 @@
     <body>
         <div id="main_form">
             <h1 align="center">Weekend Trips</h1>
-            <form action="" method="post" onsubmit="show_loading_ring()" onchange="hide_error_label()">
+            <form action="" method="post">
                 {% csrf_token %}
                 <table align="center" style="background-color: lavender" width="400px">
                     <tbody>
@@ -33,13 +33,13 @@
                         <tr><td>You expect to spent on a road:</td></tr>
                         <tr><td>
                             {% for check in form.time_for_travel %}
-                                <div class="checkbox">
+                                <div onchange="AreCheckboxesValid()" class="checkbox">
                                     {{ check }}
                                 </div>
                             {% endfor %}
                         </td></tr>
                         <tr></tr>
-                        <tr><td align="center"><button type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
+                        <tr><td align="center"><button id="Search" type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
                     </tbody>
                 </table>
             </form>
@@ -59,14 +59,18 @@
                 </tbody></table>
             {% endif %}
         </div>
-        <div id="loading_ring" class="loader" hidden="true">Loading...</div>
         <script>
-            function show_loading_ring() {
-                document.getElementById('main_form').hidden = true;
-                document.getElementById('loading_ring').hidden = false;
-            }
-            function hide_error_label() {
-                document.getElementById('error_label').hidden = true;
+            function AreCheckboxesValid() {
+                let checks = document.getElementsByName('time_for_travel')
+                let is_any_checked = false
+                for(let i = 0; i < checks.length; i++) {
+                    is_any_checked = is_any_checked || checks[i].checked
+                }
+                document.getElementById('Search').hidden = !is_any_checked
+
+                if( is_any_checked == false ) {
+                    alert('At least one checkbox must be selected!')
+                }
             }
         </script>
     </body>
