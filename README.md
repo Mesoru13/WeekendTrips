@@ -1,6 +1,40 @@
 # WeekendTrips
 Project's goal is to deliver for users an advice of trip on selected weekend.
 
-Firstly install python and django (via pip).
-Then start cmd, set current location to folder where manage.py resides and
-run "python manage.py runserver". 
+## Prerequisites
+Firstly install python 3.7 or newer
+
+## Installing
+1. clone this repo
+2. init all submodules
+```
+git submodule update
+```
+3. prepare virtual environment
+```
+python3 -m venv env
+source ./env/bin/activate
+```
+4. install all reqs
+```
+pip install -r ./requirements.txt
+pip install -r ./TicketsFinder/requirements.txt
+```
+5. prepare databases from TicketsFinder
+```
+cd TicketsFinder
+alembic upgrade head
+cd ..
+```
+## Launching
+1. run server
+```
+python manage.py runserver
+```
+2. in web browser configure params and press "Find my trip!" button
+3. open second terminal window with activated venv
+4. launch client-side script
+```
+python ./client.py
+```
+5. Profit!
