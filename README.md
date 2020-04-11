@@ -6,9 +6,9 @@ Firstly install python 3.7 or newer
 
 ## Installing
 1. clone this repo
-2. init all submodules
+2. init submodules
 ```
-git submodule update
+git submodule update --init
 ```
 3. prepare virtual environment
 ```
