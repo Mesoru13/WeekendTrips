@@ -2,6 +2,7 @@ import requests
 from time import sleep
 import json
 
+
 def find_trips(params):
     results = {
         'status': 'OK',
@@ -15,13 +16,8 @@ def find_trips(params):
 
 def get_task():
     response = requests.get('http://127.0.0.1:8000/get_task/')
-    task_id = response.headers.get('task_id')
-    task_params = response.headers.get('task_params')
-    task_data = {
-        'task_id': task_id,
-        'task_params': task_params
-    }
-    return task_data
+    print(response.json())
+    return response.json()
 
 
 def process_task(task_data):

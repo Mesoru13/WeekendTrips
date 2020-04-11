@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import InputDataForm
@@ -96,8 +96,11 @@ def get_task(request):
         response = HttpResponse()
         response.status_code = 200
         if len(task_requests) > 0:
-            response['task_id'] = task_requests[0].task_id
-            response['task_params'] = task_requests[0].json_task_params
+            response_data = {
+                'task_id': task_requests[0].task_id,
+                'task_params': task_requests[0].json_task_params
+            }
+            response = JsonResponse(response_data)
             task_request = TaskRequest.objects.get(task_id=task_requests[0].task_id)
             task_request.request_status = 1002
             task_request.save()
