@@ -1,7 +1,7 @@
 from django import forms
 import datetime
 from bootstrap_datepicker_plus import DatePickerInput
-
+from WeekendTrips.widgets import CustomCheckboxSelectMultiple
 
 def get_nearest_weekend():
     nearest_weekend = datetime.date.today()
@@ -28,14 +28,18 @@ class InputDataForm(forms.Form):
                                disabled=True, required=True)
     max_price = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}),
                                    initial=10000, required=True)
-    time_for_travel = forms.TypedMultipleChoiceField(widget=forms.CheckboxSelectMultiple(
+    time_for_travel = forms.TypedMultipleChoiceField(widget=CustomCheckboxSelectMultiple(
                                                      attrs={'class': 'form-check form-check-inline'}),
                                                      choices=travelling_time_choices,
-                                                     initial=['far', 'near', 'fair'],
+                                                     initial=['far', 'fair', 'near'],
                                                      required=True)
-    departure_city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),
-                                     initial='Moscow',
-                                     required=True)
+
+    departure_city = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control',
+                                                                  'data-live-search': 'true',
+                                                                  'data-size': '5'}),
+                                       choices=(('Москва', 'Москва'), ('Санкт-Петербург', 'Санкт-Петербург')),
+                                       initial='Москва',
+                                       required=True)
 
     def clean_start_date(self):
         data = self.cleaned_data['start_date']

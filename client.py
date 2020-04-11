@@ -35,14 +35,18 @@ def commit_task(task_data):
     response = requests.post('http://127.0.0.1:8000/commit_task/', data=task_data)
     print(response)
 
+
 if __name__ == '__main__':
     #while True:
-    sleep(60)
+    #sleep(60)
     data = get_task()
     if data['task_id'] is None:
+        print('no available tasks')
         exit(0)
-    print(data)
+    else:
+        print('task accepted')
+        print(data)
     data = process_task(data)
     print(data)
     commit_task(data)
-    print('commit')
+    print('processing finished')

@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
         <!-- Bootstrap, JS and CSS -->
         {% load static %}
@@ -11,6 +12,8 @@
         {% bootstrap_css %}         {# Embed Bootstrap CSS #}
         {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
         {{ form.media }}            {# Adds date-picker required JS and CSS #}
+        <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_api_key }}&lang=ru_RU" type="text/javascript">
+        </script>
         <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
         <title>WEEKEND TRIPS HOME</title>
     </head>
@@ -31,13 +34,7 @@
                         <tr><td>Type departure city:</td></tr>
                         <tr><td>{{ form.departure_city }}</td></tr>
                         <tr><td>You expect to spent on a road:</td></tr>
-                        <tr><td>
-                            {% for check in form.time_for_travel %}
-                                <div onchange="AreCheckboxesValid()" class="checkbox">
-                                    {{ check }}
-                                </div>
-                            {% endfor %}
-                        </td></tr>
+                        <tr><td>{{ form.time_for_travel }}</td></tr>
                         <tr></tr>
                         <tr><td align="center"><button id="Search" type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
                     </tbody>
@@ -59,18 +56,40 @@
                 </tbody></table>
             {% endif %}
         </div>
-        <script>
-            function AreCheckboxesValid() {
-                let checks = document.getElementsByName('time_for_travel')
-                let is_any_checked = false
-                for(let i = 0; i < checks.length; i++) {
-                    is_any_checked = is_any_checked || checks[i].checked
-                }
-                document.getElementById('Search').hidden = !is_any_checked
 
-                if( is_any_checked == false ) {
-                    alert('At least one checkbox must be selected!')
+        <div id="map" align="center" style="width: 600px; height: 400px"></div>
+        <script type="text/javascript">
+            navigator.geolocation.getCurrentPosition(init, error)
+
+            function init(position){
+                console.log(position)
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+                let geocode = longitude.toString() + ',' + latitude.toString()
+
+                let myMap = new ymaps.Map("map", {
+                    center: [latitude, longitude],
+                    zoom: 7
+                });
+                ymaps.ready();
+
+                let settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://geocode-maps.yandex.ru/1.x/?apikey={{ yandex_api_key }}&geocode=" + geocode
+                        + "&format=json&results=1&kind=locality",
+                    "method": "GET"
                 }
+
+                let response = $.ajax(settings).done(parseYandexResponse);
+            }
+
+            function parseYandexResponse(data) {
+                console.log(data)
+            }
+
+            function  error(err) {
+                console.log(err)
             }
         </script>
     </body>

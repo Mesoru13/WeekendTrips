@@ -12,28 +12,45 @@ def sort_requests_by_datetime(requests):
     return requests
 
 
+def extract_data_from_post(post_request):
+    data = post_request.dict()
+    data['time_for_travel'] = dict(post_request.lists()).get('time_for_travel')
+    return data
+
+
 def home(request):
+    yandex_api_key = '9a01f7c3-d337-4582-a99b-a765051710ed'
     are_previous_results_available = False
     if request.method == 'GET':
         form = InputDataForm()
         task_id = request.GET.get('task_id')
         if task_id is not None:
-            form = InputDataForm()
             task_request = TaskRequest.objects.get(task_id=task_id)
+            task_params = json.loads(task_request.json_task_params)
+            form = InputDataForm(task_params)
             if task_request.request_status == 1003:
                 are_previous_results_available = True
-
         response = render(request, 'home.html',
                           {'form': form,
+                           'yandex_api_key': yandex_api_key,
                            'are_previous_results_available': are_previous_results_available,
                            'form_error_message': ''})
         return response
     elif request.method == 'POST':
-        input_data = InputDataForm(request.POST)
-        task_id = uuid.uuid4().hex
-        json_task_params = {}
-        task_request = TaskRequest(task_id=task_id,
-                                   json_task_params=json.dumps(json_task_params, ensure_ascii=False))
+
+        input_data = InputDataForm(data=extract_data_from_post(request.POST))
+        task_params = json.dumps(input_data.data,
+                                 ensure_ascii=False)
+
+        task_id = request.GET.get('task_id')
+        task_request = None
+        if task_id is None:
+            task_id = uuid.uuid4().hex
+            task_request = TaskRequest(task_id=task_id,
+                                       json_task_params=task_params)
+        else:
+            task_request = TaskRequest.objects.get(task_id=task_id)
+            task_request.json_task_params = task_params
 
         response = None
         if input_data.is_valid():
@@ -42,6 +59,7 @@ def home(request):
         else:
             response = render(request, 'home.html',
                               {'form': input_data,
+                               'yandex_api_key': yandex_api_key,
                                'are_previous_results_available': are_previous_results_available,
                                'form_error_message':
                                    'The form your submitted is invalid, please retry entering content.'})
