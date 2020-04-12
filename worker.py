@@ -45,18 +45,6 @@ def find_trips(params):
     return result
 
 
-"""
-def find_trips(params):
-    results = {
-        'status': 'OK',
-        'search_result': [
-            {'type': 'flight', 'origin': 'Москва', 'destination': 'Сочи', 'number': 1130, 'airline': 'SU', 'price': 16487, 'departure_at': '2020-03-21T22:55:00Z', 'return_at': '2020-03-22T10:45:00Z'},
-            {'type': 'train', 'seat': 'Нижние', 'price': '13735', 'number': '104В', 'time': '1д. 1ч.', 'origin': 'Москва', 'destination': 'Сочи'}
-        ]
-    }
-    return results
-"""
-
 def get_task():
     response = requests.get('http://127.0.0.1:8000/get_task/')
     print(response.json())
