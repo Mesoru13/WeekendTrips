@@ -33,8 +33,8 @@ python manage.py runserver
 ```
 2. in web browser configure params and press "Find my trip!" button
 3. open second terminal window with activated venv
-4. launch worker script
+4. launch worker script. [optional] use TRAVEL_PAYOUTS_TOKEN env var to provide aviasales api token
 ```
-python ./worker.py
+TRAVEL_PAYOUTS_TOKEN='<token>' python ./worker.py
 ```
 5. Profit!
