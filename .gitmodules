@@ -1,0 +1,3 @@
+[submodule "TicketsFinder"]
+	path = TicketsFinder
+	url = https://github.com/Mohnach/tickets-finder.git
