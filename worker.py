@@ -6,6 +6,7 @@ from TicketsFinder.tickets_finder import prepare_db_session, get_tickets
 from datetime import datetime
 from dataclasses import asdict
 from decimal import Decimal
+from time import sleep
 
 
 def find_trips(params):
@@ -47,8 +48,11 @@ def find_trips(params):
 
 def get_task():
     response = requests.get('http://127.0.0.1:8000/get_task/')
-    print(response.json())
-    return response.json()
+    if response.headers['Content-Type'] == 'application/json':
+        print(response.json())
+        return response.json()
+    else:
+        return {}
 
 
 def process_task(task_data):
@@ -71,16 +75,16 @@ def commit_task(task_data):
 
 
 if __name__ == '__main__':
-    #while True:
-    #sleep(60)
-    data = get_task()
-    if data['task_id'] is None:
-        print('no available tasks')
-        exit(0)
-    else:
-        print('task accepted')
+    while True:
+        sleep(60)
+        data = get_task()
+        if data['task_id'] is None:
+            print('no available tasks')
+            continue
+        else:
+            print('task accepted')
+            print(data)
+        data = process_task(data)
         print(data)
-    data = process_task(data)
-    print(data)
-    commit_task(data)
-    print('processing finished')
+        commit_task(data)
+        print('processing finished')

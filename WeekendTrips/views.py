@@ -18,6 +18,19 @@ def extract_data_from_post(post_request):
     return data
 
 
+def get_cities_by_filter(city_filter):
+    cities = [
+        "Москва",
+        "Санкт-Петербург",
+        "Краснодар"
+    ]
+    data = []
+    for city in cities:
+        if city_filter in city:
+            data.append(city)
+    return data
+
+
 def home(request):
     yandex_api_key = '9a01f7c3-d337-4582-a99b-a765051710ed'
     are_previous_results_available = False
@@ -62,7 +75,8 @@ def home(request):
                                'yandex_api_key': yandex_api_key,
                                'are_previous_results_available': are_previous_results_available,
                                'form_error_message':
-                                   'The form your submitted is invalid, please retry entering content.'})
+                                   'The form your submitted is invalid, please retry entering content: '
+                                   + str(input_data.errors)})
         task_request.save()
         return response
 
@@ -85,6 +99,16 @@ def results(request):
             return render(request, 'results.html', {'task_id': task_id,
                                                     'status': task_request.request_status,
                                                     'json_result': json_task_result})
+
+
+def get_cities(request):
+    if request.method == 'GET':
+        response_data = []
+        if not request.GET.get('q') is None:
+            response_data = get_cities_by_filter(request.GET.get('q'))
+        response = JsonResponse(response_data, safe=False)
+        response.status_code = 200
+        return response
 
 
 @csrf_exempt

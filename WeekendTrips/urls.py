@@ -25,5 +25,6 @@ urlpatterns = [
     url('results/', views.results, name='results'),
     url('get_task/', views.get_task, name='get_task'),
     url('commit_task/', views.commit_task, name='commit_task'),
+    url('get_cities/', views.get_cities, name='get_cities'),
     url('', views.home, name='home')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
