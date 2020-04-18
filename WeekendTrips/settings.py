@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'WeekendTrips/templates')
+STATIC_ROOT = os.path.join(BASE_DIR, 'WeekendTrips/static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -60,7 +61,7 @@ ROOT_URLCONF = 'WeekendTrips.urls'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR + '/static/',
+    BASE_DIR + '/WeekendTrips/static/',
 ]
 
 TEMPLATES = [
