@@ -4,8 +4,12 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import InputDataForm
 from .models import TaskRequest
+from WeekendTrips.settings import STATIC_ROOT
 import json
 import uuid
+import io
+
+cities = []
 
 
 def sort_requests_by_datetime(requests):
@@ -19,11 +23,11 @@ def extract_data_from_post(post_request):
 
 
 def get_cities_by_filter(city_filter):
-    cities = [
-        "Москва",
-        "Санкт-Петербург",
-        "Краснодар"
-    ]
+    if len(cities) == 0:
+        path = STATIC_ROOT + '/cities.txt'
+        with io.open(path, encoding='utf-8') as file:
+            for line in file:
+                cities.append(line)
     data = []
     for city in cities:
         if city_filter in city:
