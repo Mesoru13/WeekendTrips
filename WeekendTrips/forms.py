@@ -16,20 +16,37 @@ def get_nearest_weekend():
 
 
 class InputDataForm(forms.Form):
-    travelling_time_choices = (('far', 'Much (~X hours)'),
-                               ('fair', 'Average (~Y hours)'),
-                               ('near', 'A little (less than Z hours)'))
+    travelling_time_choices = (('far', 'Much'),
+                               ('fair', 'Average'),
+                               ('near', 'A little'))
 
-    persons_count = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}),
+    persons_count = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control',
+                                                                       'hidden': 'true'}),
                                        min_value=1,
                                        initial=1,
                                        required=True)
     # временно фиксируем это поле на ближайших выходных
-    start_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d', attrs={'readonly': True}),
-                                 initial=get_nearest_weekend(),
+    start_date = forms.DateField(widget=DatePickerInput(
+                                 format='%Y-%m-%d',
+                                 options={
+                                     'daysOfWeekDisabled': [1, 2, 3, 4],
+                                     'defaultDate': str(get_nearest_weekend()),
+                                     'minDate': str(datetime.date.today()),
+                                     'showTodayButton': False,
+                                     'showClose': False,
+                                     'showClear': False
+                                 }),
                                  required=True)
-    end_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d', attrs={'readonly': True}),
-                               initial=get_nearest_weekend() + datetime.timedelta(days=1),
+    end_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d',
+                                                      options={
+                                                          'daysOfWeekDisabled': [1, 2, 3, 4],
+                                                          'minDate': str(datetime.date.today()),
+                                                          'defaultDate': str(get_nearest_weekend()
+                                                                             + datetime.timedelta(days=1)),
+                                                          'showTodayButton': False,
+                                                          'showClose': False,
+                                                          'showClear': False
+                                                      }),
                                required=True)
     max_price = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}),
                                    initial=10000,
@@ -41,19 +58,12 @@ class InputDataForm(forms.Form):
         required=True)
 
     departure_city = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 400px',
         'class': 'form-control basicAutoComplete',
+        'style': 'position: relative',
         'name': 'simple_select',
         'placeholder': 'Type to search...',
         'autocomplete': 'off'}),
         initial='Москва')
-
-    #    departure_city = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control',
-    #                                                                  'data-live-search': 'true',
-    #                                                                 'data-size': '5'}),
-    #                                       choices=acceptable_cities,
-    #                                       initial=acceptable_cities[0][0],
-    #                                       required=True)
 
     def clean_start_date(self):
         data = self.cleaned_data['start_date']
