@@ -12,20 +12,19 @@
         {% bootstrap_css %}         {# Embed Bootstrap CSS #}
         {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
         {{ form.media }}            {# Adds date-picker required JS and CSS #}
-        <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_api_key }}&lang=ru_RU" type="text/javascript">
-        </script>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_api_key }}&lang=ru_RU" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.4/dist/latest/bootstrap-autocomplete.min.js"></script>
-        <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
+        <link rel="stylesheet" href={% static "home.css" %}>
+        <script type="text/javascript" src={% static "covid_alert.js" %} ></script>
         <title>WEEKEND TRIPS HOME</title>
     </head>
-    <body>
-
-
-        <div id="main_form">
-            <h1 align="center">Weekend Trips</h1>
+    <body id="body_section">
+        <h1 align="center">Weekend Trips!</h1>
+        <div class="container">
+        <div id="main_section">
             <form action="" method="post">
                 {% csrf_token %}
-                <table align="center" style="background-color: lavender" width="400px">
+                <table>
                     <tbody>
                         <tr><td>
                             <div class="alert alert-warning alert-dismissible fade show">
@@ -33,11 +32,12 @@
                             <p>Though it's painful to say, but trips are not safe now due to Covid-19 spread.
                                 Please stay at home and stay safe!</p>
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        </div>
-                        <tr><td>The closest weekend dates:</td></tr>
+                            </div>
+                        </td></tr>
+                        <tr><td>Chose your dates:</td></tr>
                         <tr><td>{{ form.start_date }}</td></tr>
                         <tr><td>{{ form.end_date }}</td></tr>
-                        <tr><td>State persons count:</td></tr>
+                        <tr><td hidden="true">State persons count:</td></tr>
                         <tr><td>{{ form.persons_count }}</td></tr>
                         <tr><td>Your allowance (RUB):</td></tr>
                         <tr><td>{{ form.max_price }}</td></tr>
@@ -56,7 +56,7 @@
                 <p align="center"><label id="error_label">{{ form_error_message }}</label></p>
             {% endif %}
             {% if are_previous_results_available %}
-                <table align="center" style="background-color: lavender" width="400px"> <tbody>
+                <table><tbody>
                     <tr><td><label>We have your previous search results. Wanna see them?</label></td></tr>
                     <tr><td align="center">
                         <form action="results/" method="get">
@@ -66,60 +66,18 @@
                 </tbody></table>
             {% endif %}
         </div>
-        <table align="center">
-            <tr><td align="center">
-                <div id="map" align="center" style="width: 600px; height: 400px"></div>
-            </td></tr>
-        </table>
-        <script type="text/javascript">
-            $('.basicAutoComplete').autoComplete({
-                minLength: 0,
-                resolverSettings: {
-                    url: "/get_cities/",
-                }
-            });
-
-            navigator.geolocation.getCurrentPosition(init, error)
-
-            function init(position){
-                console.log(position)
-                let latitude = position.coords.latitude;
-                let longitude = position.coords.longitude;
-                let geocode = longitude.toString() + ',' + latitude.toString()
-
-                let myMap = new ymaps.Map("map", {
-                    center: [latitude, longitude],
-                    zoom: 15
-                });
-                myMap.geoObjects.add(new ymaps.Placemark([longitude, latitude]))
-                ymaps.ready();
-
-                let settings = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "https://geocode-maps.yandex.ru/1.x/?apikey={{ yandex_api_key }}&geocode=" + geocode
-                        + "&format=json&results=1&kind=locality",
-                    "method": "GET"
-                }
-
-                let response = $.ajax(settings).done(parseYandexResponse);
-            }
-
-            function parseYandexResponse(data) {
-                city_name = data.response.GeoObjectCollection.featureMember[0].GeoObject.name
-                console.log(city_name)
-                document.getElementById('id_departure_city').value = city_name;
-            }
-
-            function  error(err) {
-                console.log(err)
-            }
-        </script>
-        <script>
-            $(document).ready(function(){
-                $(".open").click(function(){
-                $("#myAlert").alert('close');});
-            });
-        </script>
+        <div id="maps_section">
+            <div id="map" style="width: 600px; height: 500px"></div>
+        </div>
+        </div>
     </body>
+    <script type="text/javascript" src={% static "load_maps.js" %}></script>
+    <script>
+        $('.basicAutoComplete').autoComplete({
+            minLength: 0,
+            resolverSettings: {
+                url: "/get_cities/",
+            }
+        });
+    </script>
 </html>

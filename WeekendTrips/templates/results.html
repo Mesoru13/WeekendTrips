@@ -12,42 +12,59 @@
         {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
         {{ form.media }}            {# Adds date-picker required JS and CSS #}
         <link rel="stylesheet" href={% static "loading_ring_stylesheet.css" %}>
+        <link rel="stylesheet" href={% static "result.css" %}>
+        <script type="text/javascript" src={% static "autorefresh.js" %}></script>
         <title>WEEKEND TRIPS RESULTS</title>
     </head>
-    <body {% if status == 1001 or status == 1002 %} onload="AutoRefresh(30000)" {% endif %}>
-        <h1 align="center">Weekend Trips</h1>
+    <body id="body_section" {% if status == 1001 or status == 1002 %} onload="AutoRefresh(30000)" {% endif %}>
+        <h1 align="center">Weekend Trips!</h1>
         {% if status == 1001 or status == 1002  %}
-            <p></p>
-            <p></p>
-            <p align="center">Searching!</p>
+            <h2 align="center">Searching!</h2>
             <div align="center" id="loading_ring" class="loader"/>
         {% elif status == 1003 %}
-            <table align="center" style="background-color: lavender" border="1">
-                <tbody>
+            <div id="results_section">
                 {% for advice in json_result %}
-                    <tr>
-                        {% for key,value in advice.items %}
-                            <td>{{ key }}:{{ value }}</td>
-                        {% endfor %}
-                    </tr><tr style="height:20px"></tr>
-                {%  endfor %}
-                </tbody>
-            </table>
+                    <table id="card_section" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Cities info:</th>
+                            <th scope="col">Time info:</th>
+                            <th scope="col">Tickets info:</th>
+                            <th scope="col">Links:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="col">
+                                <p>From: {{ advice.origin_city }}</p>
+                                <p>To: {{ advice.destination_city }}</p>
+                            </td>
+                            <td scope="col">
+                                <p>Departure time: {{ advice.depart_datetime }} </p>
+                                <p>Arrival time: {{ advice.arrival_datetime }} </p>
+                                <p>Return time: {{ advice.return_datetime }} </p>
+                                <p>Travel time: {{ advice.travel_time }} </p>
+                            </td>
+                            <td scope="col">
+                                <p>Ticket type: {{ advice.route_type }} </p>
+                                <p>The lowest price: {{ advice.price }}</p>
+                            </td>
+                            <td scope="col">
+                                <a href="{{ advice.url }}">Buy here!</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                {% endfor %}
+            </div>
         {% elif status == 1004 %}
-            <form action="/home" method="get" >
+            <form action="/home" method="get">
                 <input type="hidden" name="task_id" value="{{ task_id }}">
                 <div align="center">
                     <p>Your search have failed :( Please retry it!</p>
                     <button  class="btn btn-primary" type="submit">Retry!</button>
                 </div>
             </form>
-
         {% endif %}
-
-        <script type = "text/JavaScript">
-            function AutoRefresh( t ) {
-                setTimeout("location.reload(true);", t);
-            }
-        </script>
   </body>
 </html>
