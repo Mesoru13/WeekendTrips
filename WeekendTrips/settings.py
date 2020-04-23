@@ -61,7 +61,6 @@ ROOT_URLCONF = 'WeekendTrips.urls'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR + '/WeekendTrips/static/',
 ]
 
 TEMPLATES = [
