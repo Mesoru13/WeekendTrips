@@ -14,8 +14,8 @@ def find_trips(params):
 
     origin_city = json_params['departure_city']
     destination_city = 'Сочи'
-    depart_date = datetime.strptime('2020-04-21', '%Y-%m-%d')
-    return_date = datetime.strptime('2020-04-22', '%Y-%m-%d')
+    depart_date = datetime.strptime(json_params['start_date'], '%Y-%m-%d')
+    return_date = datetime.strptime(json_params['end_date'], '%Y-%m-%d')
 
     session = prepare_db_session()
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     while True:
         sleep(60)
         data = get_task()
-        if data['task_id'] is None:
+        if data.get('task_id') is None:
             print('no available tasks')
             continue
         else:
