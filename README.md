@@ -26,6 +26,10 @@ cd TicketsFinder
 alembic upgrade head
 cd ..
 ```
+6. collecting static
+```
+python manage.py collectstatic
+```
 ## Launching
 1. run server
 ```

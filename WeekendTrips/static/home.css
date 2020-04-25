@@ -37,3 +37,8 @@
     rgba(0,0,0,.125);
     border-radius: .25rem;
 }
+
+#mytable {
+    margin: 2%;
+    width: 96%;
+}
