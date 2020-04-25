@@ -25,13 +25,16 @@ class InputDataForm(forms.Form):
                                        min_value=1,
                                        initial=1,
                                        required=True)
-    # временно фиксируем это поле на ближайших выходных
+    min_date = get_nearest_weekend() - datetime.timedelta(days=1)
+    if datetime.date.today() == get_nearest_weekend():
+        min_date = get_nearest_weekend()
+
     start_date = forms.DateField(widget=DatePickerInput(
                                  format='%Y-%m-%d',
                                  options={
                                      'daysOfWeekDisabled': [1, 2, 3, 4],
                                      'defaultDate': str(get_nearest_weekend()),
-                                     'minDate': str(datetime.date.today()),
+                                     'minDate': str(min_date),
                                      'showTodayButton': False,
                                      'showClose': False,
                                      'showClear': False
@@ -40,7 +43,7 @@ class InputDataForm(forms.Form):
     end_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d',
                                                       options={
                                                           'daysOfWeekDisabled': [1, 2, 3, 4],
-                                                          'minDate': str(datetime.date.today()),
+                                                          'minDate': str(min_date),
                                                           'defaultDate': str(get_nearest_weekend()
                                                                              + datetime.timedelta(days=1)),
                                                           'showTodayButton': False,

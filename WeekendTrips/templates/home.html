@@ -24,18 +24,18 @@
         <div id="main_section">
             <form action="" method="post">
                 {% csrf_token %}
-                <table>
+                <table id="mytable">
                     <tbody>
                         <tr><td>
                             <div class="alert alert-warning alert-dismissible fade show">
-                            <h4 class="alert-heading"><i class="fa fa-warning"></i> Warning!</h4>
-                            <p>Though it's painful to say, but trips are not safe now due to Covid-19 spread.
-                                Please stay at home and stay safe!</p>
+                                <h4 class="alert-heading"><i class="fa fa-warning"></i> Warning!</h4>
+                                <p>Though it's painful to say, but trips are not safe now due to Covid-19 spread.
+                                    Please stay at home and stay safe!</p>
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                             </div>
                         </td></tr>
                         <tr><td>Chose your dates:</td></tr>
-                        <tr><td>{{ form.start_date }}</td></tr>
+                        <tr><td>{{ form.start_date }} </td></tr>
                         <tr><td>{{ form.end_date }}</td></tr>
                         <tr><td hidden="true">State persons count:</td></tr>
                         <tr><td>{{ form.persons_count }}</td></tr>
@@ -43,7 +43,7 @@
                         <tr><td>{{ form.max_price }}</td></tr>
                         <tr><td>Type departure city:</td></tr>
                         <tr><td>{{ form.departure_city }}</td></tr>
-                        <tr><td>You expect to spent on a road:</td></tr>
+                        <tr><td>How much are you ready to spend on road?</td></tr>
                         <tr><td>{{ form.time_for_travel }}</td></tr>
                         <tr></tr>
                         <tr><td align="center"><button id="Search" type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
@@ -59,7 +59,8 @@
                 <table><tbody>
                     <tr><td><label>We have your previous search results. Wanna see them?</label></td></tr>
                     <tr><td align="center">
-                        <form action="results/" method="get">
+                        <form action="../results/" method="get">
+                            <input type="hidden" name="task_id" value="{{ task_id }}">
                             <button class="btn btn-primary" type="submit">Show my previous search</button>
                         </form>
                     </td></tr>
