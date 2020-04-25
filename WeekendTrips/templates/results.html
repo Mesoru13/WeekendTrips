@@ -56,12 +56,18 @@
                     </tbody>
                     </table>
                 {% endfor %}
+                <form action="../home/" method="get">
+                    <input type="hidden" name="task_id" value="{{ task_id }}">
+                    <div align="center">
+                        <button  class="btn btn-primary" type="submit">Try another search!</button>
+                    </div>
+                </form>
             </div>
         {% elif status == 1004 %}
-            <form action="/home" method="get">
+            <form action="../home/" method="get">
                 <input type="hidden" name="task_id" value="{{ task_id }}">
                 <div align="center">
-                    <p>Your search have failed :( Please retry it!</p>
+                    <h4>Your search have failed :( Please retry it!</h4>
                     <button  class="btn btn-primary" type="submit">Retry!</button>
                 </div>
             </form>

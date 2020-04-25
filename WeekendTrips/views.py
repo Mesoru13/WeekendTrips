@@ -49,6 +49,7 @@ def home(request):
                 are_previous_results_available = True
         response = render(request, 'home.html',
                           {'form': form,
+                           'task_id': task_id,
                            'yandex_api_key': yandex_api_key,
                            'are_previous_results_available': are_previous_results_available,
                            'form_error_message': ''})

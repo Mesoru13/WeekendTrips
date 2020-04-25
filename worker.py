@@ -13,8 +13,8 @@ def find_trips(params):
     json_params = json.loads(params)
 
     origin_city = json_params['departure_city']
-    depart_date = datetime.strptime('2020-05-02', '%Y-%m-%d')
-    return_date = datetime.strptime('2020-05-03', '%Y-%m-%d')
+    depart_date = datetime.strptime(json_params['start_date'], '%Y-%m-%d')
+    return_date = datetime.strptime(json_params['end_date'], '%Y-%m-%d')
 
     session = prepare_db_session()
 
