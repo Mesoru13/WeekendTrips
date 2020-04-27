@@ -3,3 +3,4 @@ django-bootstrap-datepicker-plus
 django-bootstrap4
 django-autocomplete-light
 requests
+dataclasses

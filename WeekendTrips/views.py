@@ -161,3 +161,17 @@ def commit_task(request):
         return HttpResponse(status=200)
     else:
         return HttpResponseBadRequest('commit_task works only in POST')
+
+
+def get_task_result(request):
+    if request.method == 'GET':
+        task_id = request.GET.get('task_id')
+        task_results = {
+            'task_result': TaskRequest.objects.get(task_id=task_id).json_task_result,
+            'request_status': TaskRequest.objects.get(task_id=task_id).request_status
+        }
+        response = JsonResponse(task_results, safe=False)
+        response.status_code = 200
+        return response
+    else:
+        return HttpResponseBadRequest('get_task works only in GET')

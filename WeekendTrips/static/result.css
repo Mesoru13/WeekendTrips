@@ -2,26 +2,49 @@
     background-color: lavender;
 }
 
-#results_section {
+#ok_section {
+    align-content: center;
+    display: none;
+}
+
+#try_another {
     background-color: mintcream;
     margin: 0 5%;
     width: 90%;
-    height: 90%;
     position: relative;
     word-wrap: break-word;
     background-clip: border-box;
     border: 3px solid
     rgba(0,0,0,.125);
     border-radius: .25rem;
-    display: block;
+    display: none;
 }
 
-#card_section {
-    margin: 1%;
-    width: 98%;
-    height: 90%;
+#results_section {
+    background-color: mintcream;
+    margin: 0 5%;
+    width: 90%;
+    height: 600px;
+    position: relative;
+    word-wrap: break-word;
     background-clip: border-box;
     border: 3px solid
     rgba(0,0,0,.125);
     border-radius: .25rem;
+    display: none;
+    overflow: auto;
+}
+
+.table {
+    margin-right: 1%;
+    margin-left: 1%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 98%;
+    height: 30%;
+    background-clip: border-box;
+    border: 3px solid
+    rgba(0,0,0,.125);
+    border-radius: .25rem;
+    display: none;
 }
