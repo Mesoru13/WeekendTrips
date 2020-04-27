@@ -2,7 +2,7 @@ import requests
 import json
 from TicketsFinder.aviasales import Aviasales
 from TicketsFinder.tutu import Tutu
-from TicketsFinder.tickets_finder import prepare_db_session, get_tickets_for_all_dections, get_return_tickets_for_all_directions
+from TicketsFinder.tickets_finder import prepare_db_session, get_tickets_for_all_directions, get_return_tickets_for_all_directions
 from datetime import datetime, timedelta, time
 from dataclasses import asdict
 from decimal import Decimal
@@ -26,7 +26,7 @@ def find_trips(params):
     providers_list.append(tutu_provider)
 
     print('One way tickets')
-    search_result = get_tickets_for_all_dections(origin_city, depart_date, providers_list)
+    search_result = get_tickets_for_all_directions(origin_city, depart_date, providers_list)
 
     print('Return tickets')
     search_result += get_return_tickets_for_all_directions(origin_city, depart_date, return_date, providers_list)
@@ -129,7 +129,7 @@ def get_task():
 def process_task(task_data):
     result = find_trips(data['task_params'])
     task_data['status'] = result['status']
-    task_data['task_result'] = json.dumps(result['search_result'], default=myconverter)
+    task_data['task_result'] = json.dumps(result['search_result'], default=myconverter, ensure_ascii=False)
     return task_data
 
 
