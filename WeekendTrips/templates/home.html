@@ -74,6 +74,9 @@
     </body>
     <script type="text/javascript" src={% static "load_maps.js" %}></script>
     <script>
+        moment.lang('en', {
+            week: { dow: 1 }
+        });
         $('.basicAutoComplete').autoComplete({
             minLength: 0,
             resolverSettings: {
