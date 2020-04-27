@@ -10,23 +10,23 @@ async function build_results_page(task_id) {
                 task_result = data['task_result'];
             });
         while( result.state() == "pending" ) {
-            await async_sleep(5000);
+            await async_sleep(1000);
         };
 
         if( task_status != 1003 && task_status != 1004 ) {
-            await async_sleep(60000);
+            await async_sleep(30000);
         }
     }
 
-    $('#waiting_section').fadeOut(1000, function () {
+    $('#waiting_section').fadeOut(500, function () {
         if(task_status == 1003 ){
-            $('#ok_section').fadeIn(2000);
-            $('#results_section').fadeIn(2000, function() {
+            $('#ok_section').fadeIn(900);
+            $('#results_section').fadeIn(900, function() {
                 build_ready_results(task_status, task_result);
-                $('#try_another').fadeIn(10000);
+                $('#try_another').fadeIn(1700);
             });
         } else {
-            $('#failed_section').fadeIn(2000);
+            $('#failed_section').fadeIn(900);
         }
     });
 }
@@ -42,40 +42,38 @@ async function build_ready_results(status, result)
             let time_column = "";
             let ticket_info_column = ""
             let id = 'card_section' + i;
-            let backgroud_color;
+            let background_color;
             if( ticket['route_type'] == 'plane' ) {
-                backgroud_color = "#FCE883";
                 time_column = $("<td scope='col'>").append(
                     $("<p>").text('Departure time: ' + ticket['depart_datetime']),
                     $("<p>").text('Return time: ' + ticket['return_datetime'])
                 )
                 ticket_info_column = $("<td scope='col'>").append(
-                    $("<p>").text('Type: ' + ticket['route_type']),
+                    $("<p>").text('Travelling by: ✈'),
                     $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
                     $("<p>").text('Number: ' + ticket['airline'] + ticket['number'] )
                 )
             } else {
-                backgroud_color = "#e4e4e4"
                 time_column = $("<td scope='col'>").append(
                     $("<p>").text('Departure time: ' + ticket['depart_datetime']),
                     $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
                     $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
                 )
                 ticket_info_column = $("<td scope='col'>").append(
-                    $("<p>").text('Type: ' + ticket['route_type']),
+                    $("<p>").text('Travelling by: 🚆'),
                     $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
                     $("<p>").text('Number: ' + ticket['number'] ),
                     $("<p>").text('Seating type: ' + ticket['seat_type'])
                 )
             }
 
-            newTable = $("<table id=" + id + " class='table' style='background-color: " + backgroud_color + "'>").append(
+            newTable = $("<table id=" + id + " class='table' style='background-color: " + background_color + "'>").append(
                 $("<thead class='thead-dark'>").append(
                     $("<tr>").append(
-                        $("<th scope='col'>").text('Cities info:'),
-                        $("<th scope='col'>").text('Time info:'),
-                        $("<th scope='col'>").text('Tickets info:'),
-                        $("<th scope='col'>").text('Links:')
+                        $("<th scope='col' width='22%'>").text('Cities info:'),
+                        $("<th scope='col' width='26%'>").text('Time info:'),
+                        $("<th scope='col' width='26%'>").text('Tickets info:'),
+                        $("<th scope='col' width='26%'>").text('Links:')
                     )),
                 $("<tbody>").append(
                     $("<tr>").append(
@@ -90,8 +88,8 @@ async function build_ready_results(status, result)
                         )
                     )));
             $('#results_section').append(newTable);
-            $('#card_section' + i).fadeIn(1000);
-            await async_sleep(1000);
+            $('#card_section' + i).fadeIn(300);
+            await async_sleep(300);
         }
     } else {
         document.getElementById('waiting_section').hidden = true;
