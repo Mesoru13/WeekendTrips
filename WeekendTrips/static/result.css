@@ -1,5 +1,5 @@
 #body_section {
-    background-color: lavender;
+    background-color: #fafafe;
 }
 
 #ok_section {
@@ -8,7 +8,7 @@
 }
 
 #try_another {
-    background-color: mintcream;
+    background-color: #f8fffb;
     margin: 0 5%;
     width: 90%;
     position: relative;
@@ -21,7 +21,7 @@
 }
 
 #results_section {
-    background-color: mintcream;
+    background-color: #f8fffb;
     margin: 0 5%;
     width: 90%;
     height: 600px;

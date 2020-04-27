@@ -1,9 +1,9 @@
 #body_section {
-    background-color: lavender;
+    background-color: #fafafe;
 }
 
 #main_section {
-    background-color: mintcream;
+    background-color: #f8fffb;
     float: left;
     margin: 0 5%;
     width: 30%;
@@ -21,7 +21,7 @@
 }
 
 #maps_section {
-    background-color: mintcream;
+    background-color: #f8fffb;
     position: relative;
     float: right;
     margin-right: 5%;

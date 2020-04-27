@@ -40,27 +40,33 @@ async function build_ready_results(status, result)
         for( const [id, ticket] of Object.entries(json_result) ) {
             i++;
             let time_column = "";
-            if( ticket['return_datetime'] == null ) {
-                time_column = $("<td scope='col'>").append(
-                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
-                    $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
-                    $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
-                )
-            } else {
-                time_column = $("<td scope='col'>").append(
-                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
-                    $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
-                    $("<p>").text('Return time: ' + ticket['return_datetime']),
-                    $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
-                )
-            }
-
+            let ticket_info_column = ""
             let id = 'card_section' + i;
             let backgroud_color;
             if( ticket['route_type'] == 'plane' ) {
-                backgroud_color = "#FCE883"
+                backgroud_color = "#FCE883";
+                time_column = $("<td scope='col'>").append(
+                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
+                    $("<p>").text('Return time: ' + ticket['return_datetime'])
+                )
+                ticket_info_column = $("<td scope='col'>").append(
+                    $("<p>").text('Type: ' + ticket['route_type']),
+                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
+                    $("<p>").text('Number: ' + ticket['airline'] + ticket['number'] )
+                )
             } else {
                 backgroud_color = "#e4e4e4"
+                time_column = $("<td scope='col'>").append(
+                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
+                    $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
+                    $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
+                )
+                ticket_info_column = $("<td scope='col'>").append(
+                    $("<p>").text('Type: ' + ticket['route_type']),
+                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
+                    $("<p>").text('Number: ' + ticket['number'] ),
+                    $("<p>").text('Seating type: ' + ticket['seat_type'])
+                )
             }
 
             newTable = $("<table id=" + id + " class='table' style='background-color: " + backgroud_color + "'>").append(
@@ -78,11 +84,7 @@ async function build_ready_results(status, result)
                             $("<p>").text('To: ' + ticket['destination_city'])
                         ),
                         time_column,
-                        $("<td scope='col'>").append(
-                            $("<p>").text('Ticket time: ' + ticket['route_type']),
-                            $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)
-                                + ' Rub')
-                        ),
+                        ticket_info_column,
                         $("<td scope='col'>").append(
                             $("<a href='" + ticket['url'] + "'>").text('Buy here!')
                         )
