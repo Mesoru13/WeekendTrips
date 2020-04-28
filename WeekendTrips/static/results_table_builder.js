@@ -20,8 +20,7 @@ async function build_results_page(task_id) {
 
     $('#waiting_section').fadeOut(500, function () {
         if(task_status == 1003 ){
-            $('#ok_section').fadeIn(900);
-            $('#results_section').fadeIn(900, function() {
+            $('#ok_section').fadeIn(900, function () {
                 build_ready_results(task_status, task_result);
                 $('#try_another').fadeIn(1700);
             });
@@ -67,7 +66,8 @@ async function build_ready_results(status, result)
                 )
             }
 
-            newTable = $("<table id=" + id + " class='table' style='background-color: " + background_color + "'>").append(
+            newTable = $("<div class='row'>").append(
+                $("<table id=" + id + " class='table' style='background-color: " + background_color + "'>").append(
                 $("<thead class='thead-dark'>").append(
                     $("<tr>").append(
                         $("<th scope='col' width='22%'>").text('Cities info:'),
@@ -86,8 +86,8 @@ async function build_ready_results(status, result)
                         $("<td scope='col'>").append(
                             $("<a href='" + ticket['url'] + "'>").text('Buy here!')
                         )
-                    )));
-            $('#results_section').append(newTable);
+                    ))));
+            $('#ok_section').append(newTable);
             $('#card_section' + i).fadeIn(300);
             await async_sleep(300);
         }

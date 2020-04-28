@@ -1,5 +1,5 @@
 #body_section {
-    background-color: #fafafe;
+    background-color: #f8f9fa;
 }
 
 #ok_section {
@@ -8,15 +8,6 @@
 }
 
 #try_another {
-    background-color: #f8fffb;
-    margin: 0 5%;
-    width: 90%;
-    position: relative;
-    word-wrap: break-word;
-    background-clip: border-box;
-    border: 3px solid
-    rgba(0,0,0,.125);
-    border-radius: .25rem;
     display: none;
 }
 
@@ -24,7 +15,6 @@
     background-color: #f8fffb;
     margin: 0 5%;
     width: 90%;
-    height: 600px;
     position: relative;
     word-wrap: break-word;
     background-clip: border-box;
@@ -32,11 +22,10 @@
     rgba(0,0,0,.125);
     border-radius: .25rem;
     display: none;
-    overflow: auto;
 }
 
 .table {
-    background-color: #e4e4e4;
+    background-color: white;
     margin-right: 1%;
     margin-left: 1%;
     margin-top: 2%;
@@ -44,8 +33,12 @@
     width: 98%;
     height: 30%;
     background-clip: border-box;
-    border: 3px solid
+    box-shadow: 0 .125rem .25rem
+    rgba(0,0,0,.075) !important;
+    border: 1px solid
     rgba(0,0,0,.125);
     border-radius: .25rem;
     display: none;
+    padding: .25rem;
+    line-height: 1;
 }

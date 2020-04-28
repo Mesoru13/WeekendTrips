@@ -18,31 +18,57 @@
         <title>WEEKEND TRIPS RESULTS</title>
     </head>
     <body id="body_section">
-        <h1 align="center">Weekend Trips!</h1>
-        <div id="waiting_section">
-            <h2 align="center">Searching!</h2>
-            <div align="center" id="loading_ring" class="loader"></div>
-        </div>
-        <div id="ok_section">
-            <h2 align="center"><span class="badge badge-success">Your results are ready!</span></h2>
-            <div id="results_section">
-            </div>
-            <div id="try_another">
-                <form action="../home/" method="get">
-                    <input type="hidden" name="task_id" value="{{ task_id }}">
-                    <div align="center">
-                        <button  class="btn btn-primary" type="submit">Try another search!</button>
+        <header style="position: fixed; z-index: 10; width: 100%">
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
                     </div>
-                </form>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                            <li><a href="#" class="text-white">Like on Facebook</a></li>
+                            <li><a href="#" class="text-white">Email me</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <strong>Weekend Trips!</strong>
+                </a>
+                <div align="left">
+                    <div id="try_another"style="float: left" >
+                        <form action="../home/" method="get">
+                            <input type="hidden" name="task_id" value="{{ task_id }}">
+                            <button  class="btn btn-dark" type="submit">Try another search!</button>
+                        </form>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        </header>
+        <div id="waiting_section" style="padding-top: 3%">
+            <div id="loading_ring" class="loader"></div>
+        </div>
+        <div id="ok_section" class="container" style="padding-top: 5%">
+            <h2 align="center"><span class="badge badge-dark">Your results are ready!</span></h2>
         </div>
         <div id="failed_section">
             <form action="../home/" method="get" hidden="true">
                 <input type="hidden" name="task_id" value="{{ task_id }}">
-                <div align="center">
-                    <h4>Your search have failed :( Please retry it!</h4>
-                    <button  class="btn btn-primary" type="submit">Retry!</button>
-                </div>
+                    <div align="center">
+                        <h4>Your search have failed :( Please retry it!</h4>
+                        <button  class="btn btn-dark" type="submit">Retry!</button>
+                    </div>
             </form>
         </div>
     </body>

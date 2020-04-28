@@ -1,28 +1,30 @@
-navigator.geolocation.getCurrentPosition(init, error)
+ymaps.ready(init_map());
 
-function init(position){
-    console.log(position)
-    let latitude = position.coords.latitude;
-    let longitude = position.coords.longitude;
-    let geocode = longitude.toString() + ',' + latitude.toString()
+function init_map() {
+    navigator.geolocation.getCurrentPosition( function (position) {
+        let longitude = position.coords.longitude;
+        let latitude = position.coords.latitude;
 
-    let myMap = new ymaps.Map("map", {
-        center: [latitude, longitude],
-        zoom: 15
-    });
-    myMap.container.fitToViewport();
-    ymaps.ready();
+        let geocode = longitude.toString() + ',' + latitude.toString()
 
-    let api_key = "9a01f7c3-d337-4582-a99b-a765051710ed"
-    let settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://geocode-maps.yandex.ru/1.x/?apikey=" + api_key + "&geocode=" + geocode
-            + "&format=json&results=1&kind=locality",
-        "method": "GET"
-    }
+        let myMap = new ymaps.Map("map", {
+            center: [latitude, longitude],
+            zoom: 15
+            }, {
+                autoFitToViewport: 'always'
+            });
 
-    let response = $.ajax(settings).done(parseYandexResponse);
+        let api_key = "9a01f7c3-d337-4582-a99b-a765051710ed"
+        let settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://geocode-maps.yandex.ru/1.x/?apikey=" + api_key + "&geocode=" + geocode
+                + "&format=json&results=1&kind=locality",
+            "method": "GET"
+        }
+
+        let response = $.ajax(settings).done(parseYandexResponse);
+    })
 }
 
 function parseYandexResponse(data) {

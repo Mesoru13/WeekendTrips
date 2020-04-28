@@ -19,62 +19,101 @@
         <title>WEEKEND TRIPS HOME</title>
     </head>
     <body id="body_section">
-        <h1 align="center">Weekend Trips!</h1>
-        <div class="container">
-        <div id="main_section">
-            <form action="" method="post">
-                {% csrf_token %}
-                <table id="mytable">
-                    <tbody>
-                        <tr><td>
-                            <div class="alert alert-warning alert-dismissible fade show">
-                                <h4 class="alert-heading"><i class="fa fa-warning"></i> Warning!</h4>
-                                <p>Though it's painful to say, but trips are not safe now due to Covid-19 spread.
-                                    Please stay at home and stay safe!</p>
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            </div>
-                        </td></tr>
-                        <tr><td>Chose your dates:</td></tr>
-                        <tr><td>{{ form.start_date }} </td></tr>
-                        <tr><td>{{ form.end_date }}</td></tr>
-                        <tr><td hidden="true">State persons count:</td></tr>
-                        <tr><td>{{ form.persons_count }}</td></tr>
-                        <tr><td>Your allowance (RUB):</td></tr>
-                        <tr><td>{{ form.max_price }}</td></tr>
-                        <tr><td>Type departure city:</td></tr>
-                        <tr><td>{{ form.departure_city }}</td></tr>
-                        <tr><td>How much are you ready to spend on road?</td></tr>
-                        <tr><td>{{ form.time_for_travel }}</td></tr>
-                        <tr></tr>
-                        <tr><td align="center"><button id="Search" type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
-                    </tbody>
-                </table>
-            </form>
-            {% if form_error_message == '' %}
-                <p align="center"></p>
-            {% else %}
-                <p align="center"><label id="error_label">{{ form_error_message }}</label></p>
-            {% endif %}
-            {% if are_previous_results_available %}
-                <table><tbody>
-                    <tr><td><label>We have your previous search results. Wanna see them?</label></td></tr>
-                    <tr><td align="center">
-                        <form action="../results/" method="get">
+        <header style="position: fixed; z-index: 10; width: 100%">
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                            <li><a href="#" class="text-white">Like on Facebook</a></li>
+                            <li><a href="#" class="text-white">Email me</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <strong>Weekend Trips!</strong>
+                </a>
+                <div align="left">
+                    {% if are_previous_results_available %}
+                        <form style="float: left; margin-right: 5px" action="../results/" method="get">
                             <input type="hidden" name="task_id" value="{{ task_id }}">
-                            <button class="btn btn-primary" type="submit">Show my previous search</button>
+                            <button class="btn btn-dark" type="submit">Show my previous search</button>
                         </form>
-                    </td></tr>
-                </tbody></table>
-            {% endif %}
+                    {% endif %}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div id="maps_section">
-            <div id="map" style="width: 600px; height: 500px"></div>
-        </div>
+            <div class="alert alert-warning alert-dismissible fade show">
+                <h6 align="center" class="alert-heading"><i class="fa fa-warning"></i> Warning!</h6>
+                <p align="center">Though it's painful to say, but trips are not safe now due to Covid-19 spread.
+                    Please stay at home and stay safe!</p>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        </header>
+        <div class="container" style="padding-top: 10%">
+            <div class="row">
+                <div id="main_section">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr><th>Search parameters</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Chose your dates:</strong></td></tr>
+                                <tr><td>{{ form.start_date }} </td></tr>
+                                <tr><td>{{ form.end_date }}</td></tr>
+                                <tr><td hidden="true"><strong>State persons count:</strong></td></tr>
+                                <tr><td>{{ form.persons_count }}</td></tr>
+                                <tr><td><strong>Your allowance (RUB):</strong></td></tr>
+                                <tr><td>{{ form.max_price }}</td></tr>
+                                <tr><td><strong>Type departure city:</strong></td></tr>
+                                <tr><td>{{ form.departure_city }}</td></tr>
+                                <tr><td><strong>How much are you ready to spend on road?</strong></td></tr>
+                                <tr><td>{{ form.time_for_travel }}</td></tr>
+                                <tr><td align="center"><button id="Search" type="submit" class="btn btn-primary">Find my trip!</button></td></tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    {% if form_error_message != '' %}
+                        <p align="center"><label id="error_label">{{ form_error_message }}</label></p>
+                    {% endif %}
+                </div>
+                <div id="maps_section">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Maps</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div id="map" style="width: 100%;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </body>
     <script type="text/javascript" src={% static "load_maps.js" %}></script>
     <script>
-        moment.lang('en', {
+        moment.locale('en', {
             week: { dow: 1 }
         });
         $('.basicAutoComplete').autoComplete({
@@ -83,5 +122,12 @@
                 url: "/get_cities/",
             }
         });
+    </script>
+    <script>
+        get_height_for_maps();
+        function get_height_for_maps() {
+            let h = document.getElementById('main_section').offsetHeight - document.getElementsByClassName('thead-dark')[0].offsetHeight;
+            document.getElementById('map').style.height = (h - 20).toString() + 'px';
+        }
     </script>
 </html>
