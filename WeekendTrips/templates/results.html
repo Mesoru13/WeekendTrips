@@ -24,14 +24,12 @@
                 <div class="row">
                     <div class="col-sm-8 col-md-7 py-4">
                         <h4 class="text-white">About</h4>
-                        <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                        <p class="text-muted">That's the service that helps you find your weekend trip!</p>
                     </div>
                     <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Contact</h4>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
-                            <li><a href="#" class="text-white">Like on Facebook</a></li>
-                            <li><a href="#" class="text-white">Email me</a></li>
+                            <li><a href="#" class="text-white">Like hell you'll get any!</a></li>
                         </ul>
                     </div>
                 </div>
@@ -56,10 +54,10 @@
             </div>
         </div>
         </header>
-        <div id="waiting_section" style="padding-top: 3%">
+        <div id="waiting_section" style="padding-top: 3%; padding-bottom: 2%">
             <div id="loading_ring" class="loader"></div>
         </div>
-        <div id="ok_section" class="container" style="padding-top: 5%">
+        <div id="ok_section" class="container" style="padding-top: 5%; padding-bottom: 2%">
             <h2 align="center"><span class="badge badge-dark">Your results are ready!</span></h2>
         </div>
         <div id="failed_section">
@@ -71,6 +69,30 @@
                     </div>
             </form>
         </div>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        <div id="footer" align="center">
+            <hr>
+            Copyright &copy; WeekendTrip!
+        </div>
     </body>
     <script> build_results_page( "{{ task_id }}" ); </script>
+    <script>
+        //Get the button:
+        mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+    </script>>
 </html>
