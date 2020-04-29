@@ -47,7 +47,7 @@ def find_trips(params):
             time_conditions.append(timedelta(hours=3))
 
     def time_for_travel(ticket):
-        if ticket.route_type == 'train:':
+        if ticket.route_type == 'train':
             travel_time = ticket.travel_time  # get('travel_time')
             travel_time = timedelta(seconds=travel_time)
             for time_condition in time_conditions:
