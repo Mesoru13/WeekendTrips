@@ -41,12 +41,10 @@
                     <strong>Weekend Trips!</strong>
                 </a>
                 <div align="left">
-                    <div id="try_another"style="float: left" >
-                        <form action="../home/" method="get">
-                            <input type="hidden" name="task_id" value="{{ task_id }}">
-                            <button  class="btn btn-dark" type="submit">Try another search!</button>
-                        </form>
-                    </div>
+                    <form action="../home/" method="get" id="try_another">
+                        <input type="hidden" name="task_id" value="{{ task_id }}">
+                        <button class="btn btn-primary" type="submit">Try another search!</button>
+                    </form>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -58,7 +56,6 @@
             <div id="loading_ring" class="loader"></div>
         </div>
         <div id="ok_section" class="container" style="padding-top: 5%; padding-bottom: 2%">
-            <h2 align="center"><span class="badge badge-dark">Your results are ready!</span></h2>
         </div>
         <div id="failed_section">
             <form action="../home/" method="get" hidden="true">

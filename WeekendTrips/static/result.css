@@ -9,6 +9,8 @@
 
 #try_another {
     display: none;
+    float: left;
+    margin-right: 5px
 }
 
 #results_section {

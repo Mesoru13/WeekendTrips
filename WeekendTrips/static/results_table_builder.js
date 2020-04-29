@@ -38,21 +38,33 @@ async function build_ready_results(status, result)
         let i = 0;
         for( const [id, ticket] of Object.entries(json_result) ) {
             i++;
+            if( i > 10 ) {
+                break;
+            }
+            let points_column = "";
             let time_column = "";
-            let ticket_info_column = ""
+            let ticket_info_column = "";
             let id = 'card_section' + i;
             let background_color;
-            if( ticket['route_type'] == 'plane' ) {
+            if (ticket['route_type'] == 'plane') {
+                points_column = $("<td scope='col'>").append(
+                    $("<p>").text('From: ' + ticket['origin_city'] + ' (' + ticket['origin_point'] + ')'),
+                    $("<p>").text('To: ' + ticket['destination_city'] +  ' (' + ticket['destination_point'] + ')'),
+                );
                 time_column = $("<td scope='col'>").append(
                     $("<p>").text('Departure time: ' + ticket['depart_datetime']),
                     $("<p>").text('Return time: ' + ticket['return_datetime'])
                 )
                 ticket_info_column = $("<td scope='col'>").append(
                     $("<p>").text('Travelling by: ✈'),
-                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
-                    $("<p>").text('Number: ' + ticket['airline'] + ticket['number'] )
+                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2) + ' Rub'),
+                    $("<p>").text('Number: ' + ticket['airline'] + ticket['number'])
                 )
             } else {
+                points_column = $("<td scope='col'>").append(
+                    $("<p>").text('From: ' + ticket['origin_point']),
+                    $("<p>").text('To: ' + ticket['destination_point'])
+                )
                 time_column = $("<td scope='col'>").append(
                     $("<p>").text('Departure time: ' + ticket['depart_datetime']),
                     $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
@@ -60,33 +72,30 @@ async function build_ready_results(status, result)
                 )
                 ticket_info_column = $("<td scope='col'>").append(
                     $("<p>").text('Travelling by: 🚆'),
-                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2)  + ' Rub'),
-                    $("<p>").text('Number: ' + ticket['number'] ),
+                    $("<p>").text('The lowest price: ' + parseFloat(ticket['price']).toFixed(2) + ' Rub'),
+                    $("<p>").text('Number: ' + ticket['number']),
                     $("<p>").text('Seating type: ' + ticket['seat_type'])
                 )
             }
 
             newTable = $("<div class='row'>").append(
                 $("<table id=" + id + " class='table' style='background-color: " + background_color + "'>").append(
-                $("<thead class='thead-dark'>").append(
-                    $("<tr>").append(
-                        $("<th scope='col' width='22%'>").text('Cities info:'),
-                        $("<th scope='col' width='26%'>").text('Time info:'),
-                        $("<th scope='col' width='26%'>").text('Tickets info:'),
-                        $("<th scope='col' width='26%'>").text('Links:')
-                    )),
-                $("<tbody>").append(
-                    $("<tr>").append(
-                        $("<td scope='col'>").append(
-                            $("<p>").text('From: ' + ticket['origin_city']),
-                            $("<p>").text('To: ' + ticket['destination_city'])
-                        ),
-                        time_column,
-                        ticket_info_column,
-                        $("<td scope='col'>").append(
-                            $("<a href='" + ticket['url'] + "'>").text('Buy here!')
-                        )
-                    ))));
+                    $("<thead class='thead-dark'>").append(
+                        $("<tr>").append(
+                            $("<th scope='col' width='22%'>").text('Cities info:'),
+                            $("<th scope='col' width='26%'>").text('Time info:'),
+                            $("<th scope='col' width='26%'>").text('Tickets info:'),
+                            $("<th scope='col' width='26%'>").text('Links:')
+                        )),
+                    $("<tbody>").append(
+                        $("<tr>").append(
+                            points_column,
+                            time_column,
+                            ticket_info_column,
+                            $("<td scope='col'>").append(
+                                $("<a href='" + ticket['url'] + "'>").text('Buy here!')
+                            )
+                        ))));
             $('#ok_section').append(newTable);
             $('#card_section' + i).fadeIn(300);
             await async_sleep(300);
