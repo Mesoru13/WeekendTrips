@@ -147,10 +147,10 @@ def commit_task(task_data):
 
 if __name__ == '__main__':
     while True:
-        sleep(60)
         data = get_task()
         if data.get('task_id') is None:
             print('no available tasks')
+            sleep(60)
             continue
         else:
             print('task accepted')
