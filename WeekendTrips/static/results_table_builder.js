@@ -52,8 +52,9 @@ async function build_ready_results(status, result)
                     $("<p>").text('To: ' + ticket['destination_city'] +  ' (' + ticket['destination_point'] + ')'),
                 );
                 time_column = $("<td scope='col'>").append(
-                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
-                    $("<p>").text('Return time: ' + ticket['return_datetime'])
+                    $("<p>").text('Departure: ' + ticket['depart_datetime']),
+                    $("<p>").text('Return: ' + ticket['return_datetime']),
+                    $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
                 )
                 ticket_info_column = $("<td scope='col'>").append(
                     $("<p>").text('Travelling by: ✈'),
@@ -66,8 +67,8 @@ async function build_ready_results(status, result)
                     $("<p>").text('To: ' + ticket['destination_point'])
                 )
                 time_column = $("<td scope='col'>").append(
-                    $("<p>").text('Departure time: ' + ticket['depart_datetime']),
-                    $("<p>").text('Arrival time: ' + ticket['arrival_datetime']),
+                    $("<p>").text('Departure: ' + ticket['depart_datetime']),
+                    $("<p>").text('Arrival: ' + ticket['arrival_datetime']),
                     $("<p>").text('Travel time: ' + secondsToDhm(ticket['travel_time']))
                 )
                 ticket_info_column = $("<td scope='col'>").append(
