@@ -32,24 +32,15 @@ class InputDataForm(forms.Form):
     start_date = forms.DateField(widget=DatePickerInput(
                                  format='%Y-%m-%d',
                                  options={
-                                     'daysOfWeekDisabled': [1, 2, 3, 4],
-                                     'defaultDate': str(get_nearest_weekend()),
                                      'minDate': str(min_date),
-                                     'showTodayButton': False,
-                                     'showClose': False,
-                                     'showClear': False
                                  }),
+                                 initial=get_nearest_weekend(),
                                  required=True)
     end_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d',
                                                       options={
-                                                          'daysOfWeekDisabled': [1, 2, 3, 4],
-                                                          'minDate': str(min_date),
-                                                          'defaultDate': str(get_nearest_weekend()
-                                                                             + datetime.timedelta(days=1)),
-                                                          'showTodayButton': False,
-                                                          'showClose': False,
-                                                          'showClear': False
+                                                          'minDate': str(min_date)
                                                       }),
+                               initial=get_nearest_weekend()+datetime.timedelta(days=1),
                                required=True)
     max_price = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}),
                                    initial=10000,

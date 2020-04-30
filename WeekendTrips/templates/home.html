@@ -38,7 +38,7 @@
         </div>
         <div class="navbar navbar-dark bg-dark shadow-sm">
             <div class="container d-flex justify-content-between">
-                <a href="#" class="navbar-brand d-flex align-items-center">
+                <a href="../home/?{{ task_id }}" class="navbar-brand d-flex align-items-center">
                     <strong>Weekend Trips!</strong>
                 </a>
                 <div align="left">
@@ -115,9 +115,35 @@
     </body>
     <script type="text/javascript" src={% static "load_maps.js" %}></script>
     <script>
-        moment.locale('en', {
-            week: { dow: 1 }
+        $('#id_start_date').datetimepicker({
+            locale: 'ru',
+            format: 'YYYY-MM-DD',
+            daysOfWeekDisabled: [1, 2, 3, 4],
+            showTodayButton: false,
+            showClose: false,
+            showClear: false
         });
+        $('#id_end_date').datetimepicker({
+            locale: 'ru',
+            format: 'YYYY-MM-DD',
+            daysOfWeekDisabled: [1, 2, 3, 4],
+            showTodayButton: false,
+            showClose: false,
+            showClear: false
+        });
+
+        $('#id_start_date').data('DateTimePicker').date($('#id_start_date')[0].attributes['value'].nodeValue)
+        $('#id_end_date').data('DateTimePicker').date($('#id_end_date')[0].attributes['value'].nodeValue)
+        $('#id_start_date').on('dp.change',function(e) {
+            $('#id_end_date').data('DateTimePicker').minDate(e.date);
+            $('#id_start_date')[0].attributes['value'].nodeValue = e.date.format(e.date._f);
+        });
+        $('#id_end_date').on('dp.change',function(e) {
+            $('#id_start_date').data('DateTimePicker').maxDate(e.date);
+            $('#id_end_date')[0].attributes['value'].nodeValue = e.date.format(e.date._f);
+        });
+    </script>
+    <script>
         $('.basicAutoComplete').autoComplete({
             minLength: 0,
             resolverSettings: {

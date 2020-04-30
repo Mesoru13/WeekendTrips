@@ -45,7 +45,6 @@ async function build_ready_results(status, result)
             let time_column = "";
             let ticket_info_column = "";
             let id = 'card_section' + i;
-            let background_color;
             if (ticket['route_type'] == 'plane') {
                 points_column = $("<td scope='col'>").append(
                     $("<p>").text('From: ' + ticket['origin_city'] + ' (' + ticket['origin_point'] + ')'),
@@ -80,13 +79,13 @@ async function build_ready_results(status, result)
             }
 
             newTable = $("<div class='row'>").append(
-                $("<table id=" + id + " class='table' style='background-color: " + background_color + "'>").append(
+                $("<table id=" + id + " class='table'>").append(
                     $("<thead class='thead-dark'>").append(
                         $("<tr>").append(
-                            $("<th scope='col' width='22%'>").text('Cities info:'),
-                            $("<th scope='col' width='26%'>").text('Time info:'),
-                            $("<th scope='col' width='26%'>").text('Tickets info:'),
-                            $("<th scope='col' width='26%'>").text('Links:')
+                            $("<th scope='col' width='22%' style='background-color: #512da8'>").text('Cities info:'),
+                            $("<th scope='col' width='26%' style='background-color: #512da8'>").text('Time info:'),
+                            $("<th scope='col' width='26%' style='background-color: #512da8'>").text('Tickets info:'),
+                            $("<th scope='col' width='26%' style='background-color: #512da8'>").text('Links:')
                         )),
                     $("<tbody>").append(
                         $("<tr>").append(
