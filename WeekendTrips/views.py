@@ -154,6 +154,7 @@ def commit_task(request):
                 task_request.json_task_result = request.POST.get('task_result')
         else:
             task_request.request_status = 1004
+            task_request.json_task_result = "{}"
         task_request.save()
         return HttpResponse(status=200)
     else:

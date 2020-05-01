@@ -57,12 +57,15 @@
         </div>
         <div id="ok_section" class="container" style="padding-top: 5%; padding-bottom: 2%">
         </div>
-        <div id="failed_section">
-            <form action="../home/" method="get" hidden="true">
+        <div id="failed_section" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5">
+            <form action="../home/" method="get">
                 <input type="hidden" name="task_id" value="{{ task_id }}">
-                    <div align="center">
-                        <h4>Your search have failed :( Please retry it!</h4>
-                        <button  class="btn btn-dark" type="submit">Retry!</button>
+                    <div class="alert alert-dark alert-dismissible fade show">
+                        <p>We are very sorry, but we were not able to find tickets for your.</p>
+                        <p>Please, reconsider your criteria and retry search.</p>
+                        <div align="right">
+                            <button class="btn btn-primary" type="submit">Retry!</button>
+                        </div>
                     </div>
             </form>
         </div>
