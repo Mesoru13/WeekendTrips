@@ -155,6 +155,7 @@
             $('#id_end_date')[0].attributes['value'].nodeValue = e.date.format(e.date._f);
         });
         $('#id_departure_city').on('change', function() {
+            document.getElementById('id_departure_city').attributes['value'].nodeValue = this.value;
             let geocode = document.getElementById('id_departure_city').attributes['value'].nodeValue;
             let api_key = "9a01f7c3-d337-4582-a99b-a765051710ed";
             let settings = {
