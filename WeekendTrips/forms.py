@@ -2,6 +2,8 @@ from django import forms
 import datetime
 from bootstrap_datepicker_plus import DatePickerInput
 from WeekendTrips.widgets import CustomCheckboxSelectMultiple
+from WeekendTrips.settings import STATIC_ROOT
+import io
 
 
 def get_nearest_weekend():
@@ -30,17 +32,17 @@ class InputDataForm(forms.Form):
         min_date = get_nearest_weekend()
 
     start_date = forms.DateField(widget=DatePickerInput(
-                                 format='%Y-%m-%d',
-                                 options={
-                                     'minDate': str(min_date),
-                                 }),
-                                 initial=get_nearest_weekend(),
-                                 required=True)
+        format='%Y-%m-%d',
+        options={
+            'minDate': str(min_date),
+        }),
+        initial=get_nearest_weekend(),
+        required=True)
     end_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d',
                                                       options={
                                                           'minDate': str(min_date)
                                                       }),
-                               initial=get_nearest_weekend()+datetime.timedelta(days=1),
+                               initial=get_nearest_weekend() + datetime.timedelta(days=1),
                                required=True)
     max_price = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}),
                                    initial=10000,
@@ -69,6 +71,19 @@ class InputDataForm(forms.Form):
 
     def clean_departure_city(self):
         data = self.cleaned_data['departure_city']
+
+        cities = []
+        path = STATIC_ROOT + '/cities.txt'
+        was_found = False;
+        with io.open(path, encoding='utf-8') as file:
+            for line in file:
+                if data in line:
+                    was_found = True
+
+        if not was_found:
+            raise forms.ValidationError('Sorry, but your departure city is not supported now. Please try the nearest '
+                                        'city with a railway station or an airport.')
+
         return data
 
     def clean_max_price(self):

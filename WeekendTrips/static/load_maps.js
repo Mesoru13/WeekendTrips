@@ -7,12 +7,17 @@ function init_map() {
 
         let geocode = longitude.toString() + ',' + latitude.toString()
 
-        let myMap = new ymaps.Map("map", {
+        myMap = new ymaps.Map("map", {
             center: [latitude, longitude],
-            zoom: 15
+            zoom: 10
             }, {
                 autoFitToViewport: 'always'
             });
+
+        myPlacemark = new ymaps.Placemark([latitude, longitude], { content: 'Your current position!',
+            balloonContent: 'Your current position' });
+
+        myMap.geoObjects.add(myPlacemark);
 
         let api_key = "9a01f7c3-d337-4582-a99b-a765051710ed"
         let settings = {

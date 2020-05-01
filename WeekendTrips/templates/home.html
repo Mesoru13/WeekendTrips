@@ -61,6 +61,21 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         </header>
+        {% if form.errors.as_json != '{}' %}
+            <div class="alert alert-danger alert-dismissible fade show" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5">
+                <h6 align="center" class="alert-heading" id="error_messages"></h6>
+                    <script>
+                        let errors_list = "{{ form.errors.as_json }}".replace(/&quot;/g,"\"");
+                        let errors_json = JSON.parse( errors_list );
+                        for( const [key, value] of Object.entries(errors_json) ) {
+                            $('#error_messages').append(
+                                $("<p>").text( value[0]['message'] )
+                            )
+                        }
+                    </script>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
         <main class="container" style="padding-top: 10%; padding-bottom: 2%">
             <div class="row">
                 <div id="main_section">
@@ -68,7 +83,7 @@
                         {% csrf_token %}
                         <table class="table">
                             <thead class="thead-dark">
-                                <tr><th>Search parameters</th></tr>
+                                <tr><th style='background-color: #512da8'>Search parameters</th></tr>
                             </thead>
                             <tbody>
                                 <tr><td><strong>Chose your dates:</strong></td></tr>
@@ -86,15 +101,12 @@
                             </tbody>
                         </table>
                     </form>
-                    {% if form_error_message != '' %}
-                        <p align="center"><label id="error_label">{{ form_error_message }}</label></p>
-                    {% endif %}
                 </div>
                 <div id="maps_section">
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Maps</th>
+                                <th style='background-color: #512da8'>Maps</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,6 +154,30 @@
             $('#id_start_date').data('DateTimePicker').maxDate(e.date);
             $('#id_end_date')[0].attributes['value'].nodeValue = e.date.format(e.date._f);
         });
+        $('#id_departure_city').on('change', function() {
+            let geocode = document.getElementById('id_departure_city').attributes['value'].nodeValue;
+            let api_key = "9a01f7c3-d337-4582-a99b-a765051710ed";
+            let settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://geocode-maps.yandex.ru/1.x/?apikey=" + api_key + "&geocode=" + geocode
+                    + "&format=json&results=1&kind=locality",
+                "method": "GET"
+            }
+
+            let response = $.ajax(settings).done(resfreshMap)
+        })
+        function resfreshMap(data) {
+            let coords = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ');
+            console.log(coords);
+            myMap.setCenter([parseFloat(coords[1]), parseFloat(coords[0])])
+
+            myPlacemark = new ymaps.Placemark([parseFloat(coords[1]), parseFloat(coords[0])], { content: 'Your chosen position!',
+            balloonContent: 'Your chosen position' });
+
+            myMap.geoObjects.removeAll();
+            myMap.geoObjects.add(myPlacemark);
+        }
     </script>
     <script>
         $('.basicAutoComplete').autoComplete({
