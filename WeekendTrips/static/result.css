@@ -26,6 +26,10 @@
     display: none;
 }
 
+#failed_section {
+    display: none;
+}
+
 .table {
     background-color: white;
     margin-right: 1%;
