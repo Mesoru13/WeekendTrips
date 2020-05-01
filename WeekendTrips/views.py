@@ -78,10 +78,7 @@ def home(request):
             response = render(request, 'home.html',
                               {'form': input_data,
                                'yandex_api_key': yandex_api_key,
-                               'are_previous_results_available': are_previous_results_available,
-                               'form_error_message':
-                                   'The form your submitted is invalid, please retry entering content: '
-                                   + str(input_data.errors)})
+                               'are_previous_results_available': are_previous_results_available})
         task_request.save()
         return response
 

@@ -93,7 +93,8 @@ async function build_ready_results(status, result)
                             time_column,
                             ticket_info_column,
                             $("<td scope='col'>").append(
-                                $("<a href='" + ticket['url'] + "'>").text('Buy here!')
+                                $("<p>").append($("<a href='" + ticket['url'] + "'>").text('Buy here!')),
+                                $("<p>").append($("<a href='" + ticket['attractions_url'] + "'>").text('What to see?'))
                             )
                         ))));
             $('#ok_section').append(newTable);
