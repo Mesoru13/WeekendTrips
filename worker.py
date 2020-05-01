@@ -67,6 +67,9 @@ def find_trips(params):
     # сортируем по удобности
     search_result = sort_tickets(search_result)
 
+    # берем уникальные направления
+    search_result = get_unique_routes(search_result)
+
     list_of_tickets = convert_tickets_to_dicts(search_result)
 
     result = generate_result(list_of_tickets)
@@ -91,6 +94,19 @@ def sort_tickets(tickets):
             ticket.nice -= 10
 
     return sorted(tickets, key=lambda x: x.nice, reverse=True)
+
+
+# возьмем по одному билету на каждое направление
+def get_unique_routes(tickets):
+    seen = set()
+    filtered_tickets = []
+    for ticket in tickets:
+        target_city = ticket.destination_point
+        if target_city not in seen:
+            seen.add(target_city)
+            filtered_tickets.append(ticket)
+
+    return filtered_tickets
 
 
 def convert_tickets_to_dicts(raw_tickets):
